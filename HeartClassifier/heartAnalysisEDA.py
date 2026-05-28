@@ -65,23 +65,27 @@ if not os.path.exists(folder_name):
 #plt.close()
 
 #Create another figure
-plt.figure(figsize=(10,6))
+#plt.figure(figsize=(10,6))
 
 #Start with positive examples => Has Heart Disease
-plt.scatter(df.age[df.target==1],
-            df.thalach[df.target==1],
-            c="salmon")
+#plt.scatter(df.age[df.target==1],
+            #df.thalach[df.target==1],
+            #c="salmon")
 #Now for negative examples => Does not have Heart Disease
-plt.scatter(df.age[df.target==0],
-            df.thalach[df.target==0],
-            c="lightblue")
+#plt.scatter(df.age[df.target==0],
+            #df.thalach[df.target==0],
+            #c="lightblue")
 #Customization for the scatterplot
-plt.title("Heart Disease in function of Age and Max Heart Rate")
-plt.xlabel("Age")
-plt.legend(["Disease", "No Disease"])
-plt.ylabel("Max Heart Rate")
+#plt.title("Heart Disease in function of Age and Max Heart Rate")
+#plt.xlabel("Age")
+#plt.legend(["Disease", "No Disease"])
+#plt.ylabel("Max Heart Rate")
 
-plt.savefig(f'{folder_name}/HeartDiseaseAgeAndMaximumHeartRate.png', dpi=300)
+#plt.savefig(f'{folder_name}/HeartDiseaseAgeAndMaximumHeartRate.png', dpi=300)
+#plt.close()
+
+df.age.plot.hist()
+plt.savefig(f'{folder_name}/AgeDistributionGraph.png', dpi=300)
 plt.close()
 
 
