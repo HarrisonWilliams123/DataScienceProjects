@@ -36,9 +36,26 @@ if not os.path.exists(folder_name):
 #print(df.target.value_counts(normalize=True))
 
 #Plot the value counts with a bar graph
-df.target.value_counts().plot(kind="bar", color=["salmon", "lightblue"])
-plt.savefig(f'{folder_name}/targetValueCountsBarGraph.png', dpi=300)
+#df.target.value_counts().plot(kind="bar", color=["salmon", "lightblue"])
+#plt.savefig(f'{folder_name}/targetValueCountsBarGraph.png', dpi=300)
+#plt.close()
+
+#Prints out the DataFrame information
+#print(df.info())
+
+#Prints out the count, mean, std, min, 25%, 50%, 75%, and max for each column
+#print(df.describe())
+
+
+#Compare target column with sex column
+#print(pd.crosstab(index=df.target, columns=df.sex))
+
+
+#Create a plot
+pd.crosstab(df.target, df.sex).plot(kind="bar",
+                                    figsize=(10,6),
+                                    color=["salmon", "lightblue"])
+
+plt.savefig(f'{folder_name}/targetVsSexBarPlot.png', dpi=300)
 plt.close()
-
-
 
