@@ -45,4 +45,4 @@ feature_names = transformer.get_feature_names_out()
 X_df = pd.DataFrame(X, columns=feature_names)
 print(X_df)
 """
-df.to_csv('cleaned_heart_disease_data.csv')
+#df.to_csv('cleaned_heart_disease_data.csv')

@@ -104,6 +104,6 @@ if not os.path.exists(folder_name):
 #plt.close()
 
 #Find the correlation between our independent variables
-corr_matrix = df.corr()
-print(corr_matrix)
+#corr_matrix = df.corr()
+#corr_matrix.to_excel("correlation_matrix.xlsx")
 
