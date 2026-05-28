@@ -90,18 +90,20 @@ if not os.path.exists(folder_name):
 #plt.close()
 
 #Creates a new plot for Comparing Heart Disease Frequency and Chest Pain Type
-pd.crosstab(df.cp, df.target).plot(kind="bar",
-                                   figsize=(10,6),
-                                   color=["lightblue", "salmon"])
+#pd.crosstab(df.cp, df.target).plot(kind="bar",
+                                   #figsize=(10,6),
+                                   #color=["lightblue", "salmon"])
 #Customization to the plot to make it more readable
-plt.title("Heart Disease Frequency Per Chest Pain Type")
-plt.xlabel("Chest Pain Type")
-plt.ylabel("Frequency")
-plt.legend(["No Disease", "Disease"])
-plt.xticks(rotation=0)
+#plt.title("Heart Disease Frequency Per Chest Pain Type")
+#plt.xlabel("Chest Pain Type")
+#plt.ylabel("Frequency")
+#plt.legend(["No Disease", "Disease"])
+#plt.xticks(rotation=0)
 
-plt.savefig(f'{folder_name}/ChestPainTypeAndHeartDiseaseFrequency.png', dpi=300)
-plt.close()
+#plt.savefig(f'{folder_name}/ChestPainTypeAndHeartDiseaseFrequency.png', dpi=300)
+#plt.close()
 
-
+#Find the correlation between our independent variables
+corr_matrix = df.corr()
+print(corr_matrix)
 
