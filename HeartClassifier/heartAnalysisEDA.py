@@ -104,13 +104,14 @@ if not os.path.exists(folder_name):
 #plt.close()
 
 #Find the correlation between our independent variables
-corr_matrix = df.corr()
+#corr_matrix = df.corr()
 #corr_matrix.to_excel("correlation_matrix.xlsx")
-plt.figure(figsize=(15,10))
-sns.heatmap(corr_matrix,
-            annot=True,
-            linewidth=0.5,
-            fmt=".2f",
-            cmap="YlGnBu")
-plt.savefig(f'{folder_name}/CorrelationMatrixHeatMap.png', dpi=300)
-plt.close()
+#plt.figure(figsize=(15,10))
+#sns.heatmap(corr_matrix,
+            #annot=True,
+            #linewidth=0.5,
+            #fmt=".2f",
+            #cmap="YlGnBu")
+#plt.savefig(f'{folder_name}/CorrelationMatrixHeatMap.png', dpi=300)
+#plt.close()
+
