@@ -52,10 +52,38 @@ if not os.path.exists(folder_name):
 
 
 #Create a plot
-pd.crosstab(df.target, df.sex).plot(kind="bar",
-                                    figsize=(10,6),
-                                    color=["salmon", "lightblue"])
+#pd.crosstab(df.target, df.sex).plot(kind="bar",
+                                    #figsize=(10,6),
+                                    #color=["salmon", "lightblue"])
+#Customization for graph
+#plt.title("Heart Disease Frequency vs Sex")
+#plt.xlabel("0 = No disease, 1 = Disease")
+#plt.ylabel("Amount")
+#plt.legend(["Female", "Male"])
+#plt.xticks(rotation=0)
+#plt.savefig(f'{folder_name}/targetVsSexBarPlot.png', dpi=300)
+#plt.close()
 
-plt.savefig(f'{folder_name}/targetVsSexBarPlot.png', dpi=300)
+#Create another figure
+plt.figure(figsize=(10,6))
+
+#Start with positive examples => Has Heart Disease
+plt.scatter(df.age[df.target==1],
+            df.thalach[df.target==1],
+            c="salmon")
+#Now for negative examples => Does not have Heart Disease
+plt.scatter(df.age[df.target==0],
+            df.thalach[df.target==0],
+            c="lightblue")
+#Customization for the scatterplot
+plt.title("Heart Disease in function of Age and Max Heart Rate")
+plt.xlabel("Age")
+plt.legend(["Disease", "No Disease"])
+plt.ylabel("Max Heart Rate")
+
+plt.savefig(f'{folder_name}/HeartDiseaseAgeAndMaximumHeartRate.png', dpi=300)
 plt.close()
+
+
+
 
