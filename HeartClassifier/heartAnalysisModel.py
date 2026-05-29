@@ -24,6 +24,12 @@ from sklearn.metrics import RocCurveDisplay
 # Read from csv file from local directory
 df = pd.read_csv("cleaned_heart_disease_data.csv")
 
+#Created universal folder name variable
+folder_name = 'ModelGraphs'
+
+if not os.path.exists(folder_name):
+    os.makedirs(folder_name)
+
 # Removed unwanted column that was in the dataset
 df = df.drop('Unnamed: 0', axis=1)
 
@@ -67,7 +73,10 @@ model_scores = fit_and_score(models=models,
                              y_train=y_train,
                              y_test=y_test)
 
-print(model_scores)
+model_compare = pd.DataFrame(model_scores, index=['accuracy'])
+model_compare.T.plot.bar()
+plt.savefig(f'{folder_name}/modelComparison.png', dpi=300)
+plt.close()
 
 
 
