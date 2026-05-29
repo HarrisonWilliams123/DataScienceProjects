@@ -11,6 +11,7 @@ import sklearn
 from sklearn.linear_model import LogisticRegression
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.ensemble import RandomForestClassifier
+import xgboost as xgb
 
 ## Model Evaluators
 from sklearn.model_selection import train_test_split, cross_val_score
@@ -42,7 +43,8 @@ X_train, X_test, y_train, y_test = train_test_split(X,
 #Put models into a dictionary
 models = {"KNN": KNeighborsClassifier(),
           "Logistic Regression": LogisticRegression(max_iter=100),
-          "Random Forest": RandomForestClassifier()}
+          "Random Forest": RandomForestClassifier(),
+          "Xgb": xgb.XGBClassifier()}
 
 #Create function to fit and score models
 def fit_and_score(models, X_train, X_test, y_train, y_test):
