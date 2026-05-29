@@ -26,28 +26,46 @@ df = pd.read_csv("cleaned_heart_disease_data.csv")
 # Removed unwanted column that was in the dataset
 df = df.drop('Unnamed: 0', axis=1)
 
+#Everything except target variable
+X = df.drop(labels="target", axis=1)
 
-"""
-categorical_features = ["sex", "target"]
-categorical_transformer = Pipeline(steps =[
-    ("imputer", SimpleImputer(strategy="constant", fill_value="missing")),
-    ("onehot", OneHotEncoder(handle_unknown="ignore"))
-])
+#Target variable
+y = df.target.to_numpy()
 
-numeric_features = ["age", "cp", "trestbps", "chol", "fbs", "restecg", "thalach", "exang", "oldpeak", "slope", "ca", "thal"]
-numeric_transformer = Pipeline(steps =[
-    ("imputer", SimpleImputer(strategy="mean"))
-])
+#Random seed for reproducibility
+np.random.seed(42)
+#Split into train & test set
+X_train, X_test, y_train, y_test = train_test_split(X,
+                                                    y,
+                                                    test_size=0.2)
 
-transformer = ColumnTransformer(
-    transformers = [
-        ("cat", categorical_transformer, categorical_features),
-        ("num", numeric_transformer, numeric_features)
-    ]
-)
+#Put models into a dictionary
+models = {"KNN": KNeighborsClassifier(),
+          "Logistic Regression": LogisticRegression(max_iter=100),
+          "Random Forest": RandomForestClassifier()}
 
-X = transformer.fit_transform(df)
-feature_names = transformer.get_feature_names_out()
-X_df = pd.DataFrame(X, columns=feature_names)
-print(X_df)
-"""
+#Create function to fit and score models
+def fit_and_score(models, X_train, X_test, y_train, y_test):
+    #Fits and evaluates given machine learning models
+    #Random seed for reproducible results
+    np.random.seed(42)
+    #Make a list to keep model scores
+    model_scores = {}
+    #Loop through models
+    for name, model in models.items():
+        #Fit the model to the data
+        model.fit(X_train, y_train)
+        #Evaluate the model and append its score to model_scores
+        model_scores[name] = model.score(X_test, y_test)
+    return model_scores
+
+model_scores = fit_and_score(models=models,
+                             X_train=X_train,
+                             X_test=X_test,
+                             y_train=y_train,
+                             y_test=y_test)
+
+print(model_scores)
+
+
+
