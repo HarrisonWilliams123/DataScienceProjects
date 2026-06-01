@@ -73,10 +73,44 @@ model_scores = fit_and_score(models=models,
                              y_train=y_train,
                              y_test=y_test)
 
-model_compare = pd.DataFrame(model_scores, index=['accuracy'])
-model_compare.T.plot.bar()
-plt.savefig(f'{folder_name}/modelComparison.png', dpi=300)
+#model_compare = pd.DataFrame(model_scores, index=['accuracy'])
+#model_compare.T.plot.bar()
+#plt.savefig(f'{folder_name}/modelComparison.png', dpi=300)
+#plt.close()
+
+#Create a list of train scores
+train_scores = []
+#Create a list of test scores
+test_scores = []
+#Create a list of different values for n_neigbors
+neighbors = range(1,21)
+
+#Setup algorithm
+knn = KNeighborsClassifier()
+
+#Loop through different neighbors values
+for i in neighbors:
+    knn.set_params(n_neighbors = i)
+
+    #Fit the algorithm
+    knn.fit(X_train, y_train)
+
+    #Update the training scores
+    train_scores.append(knn.score(X_train, y_train))
+
+    #Update the test scores
+    test_scores.append(knn.score(X_test, y_test))
+
+#Create plot to visualize the test and training scores
+plt.plot(neighbors, train_scores, label="Train score")
+plt.plot(neighbors, test_scores, label="Test Score")
+plt.xticks(np.arange(1, 21, 1))
+plt.xlabel("Number of neighbors")
+plt.ylabel("Model score")
+plt.legend()
+plt.savefig(f'{folder_name}/TestAndTrainScoresKNN.png', dpi=300)
 plt.close()
 
+print(f"Maximum KNN score on the test data: {max(test_scores)*100:.2f}%")
 
 
