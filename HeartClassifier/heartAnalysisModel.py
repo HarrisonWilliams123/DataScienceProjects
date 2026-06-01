@@ -160,6 +160,18 @@ gs_log_reg = GridSearchCV(LogisticRegression(),
 gs_log_reg.fit(X_train, y_train)
 
 #Check the best parameters
-print(gs_log_reg.best_params_)
+#print(gs_log_reg.best_params_)
 #Evaluate the model
-print(gs_log_reg.score(X_test, y_test))
+#print(gs_log_reg.score(X_test, y_test))
+
+#Create figure to plot the RocCurveDisplay
+fig, ax = plt.subplots(figsize=(6,6))
+
+#Use a model to plot ROC curve on data
+display = RocCurveDisplay.from_estimator(estimator=gs_log_reg,
+                               X=X_test,
+                               y=y_test,
+                               ax=ax)
+
+plt.savefig(f'{folder_name}/RocCurveDisplay.png', dpi=300)
+plt.close()
