@@ -86,31 +86,51 @@ test_scores = []
 neighbors = range(1,21)
 
 #Setup algorithm
-knn = KNeighborsClassifier()
+#knn = KNeighborsClassifier()
 
 #Loop through different neighbors values
-for i in neighbors:
-    knn.set_params(n_neighbors = i)
+#for i in neighbors:
+    #knn.set_params(n_neighbors = i)
 
     #Fit the algorithm
-    knn.fit(X_train, y_train)
+    #knn.fit(X_train, y_train)
 
     #Update the training scores
-    train_scores.append(knn.score(X_train, y_train))
+    #train_scores.append(knn.score(X_train, y_train))
 
     #Update the test scores
-    test_scores.append(knn.score(X_test, y_test))
+    #test_scores.append(knn.score(X_test, y_test))
 
 #Create plot to visualize the test and training scores
-plt.plot(neighbors, train_scores, label="Train score")
-plt.plot(neighbors, test_scores, label="Test Score")
-plt.xticks(np.arange(1, 21, 1))
-plt.xlabel("Number of neighbors")
-plt.ylabel("Model score")
-plt.legend()
-plt.savefig(f'{folder_name}/TestAndTrainScoresKNN.png', dpi=300)
-plt.close()
+#plt.plot(neighbors, train_scores, label="Train score")
+#plt.plot(neighbors, test_scores, label="Test Score")
+#plt.xticks(np.arange(1, 21, 1))
+#plt.xlabel("Number of neighbors")
+#plt.ylabel("Model score")
+#plt.legend()
+#plt.savefig(f'{folder_name}/TestAndTrainScoresKNN.png', dpi=300)
+#plt.close()
 
-print(f"Maximum KNN score on the test data: {max(test_scores)*100:.2f}%")
+#print(f"Maximum KNN score on the test data: {max(test_scores)*100:.2f}%")
 
+#Different LogisticRegression hyperparameters
+log_reg_grid = {"C": np.logspace(-4, 4, 20),
+                "solver": ["liblinear"]}
 
+#Different RandomForestClassifier hyperparameters
+rf_grid = {"n_estimators": np.arange(10, 1000, 50),
+           "max_depth": [None, 3, 5, 10],
+           "min_samples_split": np.arange(2,20,2),
+           "min_samples_leaf": np.arange(1,20,2)}
+
+#Setup random hyperparamter search for LogisticRegression
+rs_log_reg = RandomizedSearchCV(LogisticRegression(),
+                                param_distributions=log_reg_grid,
+                                cv=5,
+                                n_iter=20,
+                                verbose=True)
+
+#Fit random hyperparameter search model
+rs_log_reg.fit(X_train, y_train)
+print(rs_log_reg.best_params_)
+print(rs_log_reg.score(X_test, y_test))
