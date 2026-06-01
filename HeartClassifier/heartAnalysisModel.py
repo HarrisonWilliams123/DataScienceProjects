@@ -136,16 +136,30 @@ rf_grid = {"n_estimators": np.arange(10, 1000, 50),
 #print(rs_log_reg.score(X_test, y_test))
 
 #Setup random hyperparameter search for RandomForestClassifier
-rs_rf = RandomizedSearchCV(RandomForestClassifier(),
-                           param_distributions=rf_grid,
-                           cv=5,
-                           n_iter=20,
-                           verbose=True)
+#rs_rf = RandomizedSearchCV(RandomForestClassifier(),
+                           #param_distributions=rf_grid,
+                           #cv=5,
+                           #n_iter=20,
+                           #verbose=True)
 
 #Fit random hyperparameter search model
-rs_rf.fit(X_train, y_train)
+#rs_rf.fit(X_train, y_train)
 
 #Find the best parameters
-print(rs_rf.best_params_)
+#print(rs_rf.best_params_)
 #Evaluate the randomized search random forest model
-print(rs_rf.score(X_test, y_test))
+#print(rs_rf.score(X_test, y_test))
+
+#Setup grid hyperparamter search for LogisticRegression
+gs_log_reg = GridSearchCV(LogisticRegression(),
+                            param_grid=log_reg_grid,
+                            cv=5,
+                            verbose=True)
+
+#Fit grid hyperparameter search model
+gs_log_reg.fit(X_train, y_train)
+
+#Check the best parameters
+print(gs_log_reg.best_params_)
+#Evaluate the model
+print(gs_log_reg.score(X_test, y_test))
