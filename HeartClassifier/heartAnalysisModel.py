@@ -165,13 +165,29 @@ gs_log_reg.fit(X_train, y_train)
 #print(gs_log_reg.score(X_test, y_test))
 
 #Create figure to plot the RocCurveDisplay
-fig, ax = plt.subplots(figsize=(6,6))
+#fig, ax = plt.subplots(figsize=(6,6))
+
+#Make predictions on test data
+y_preds = gs_log_reg.predict(X_test)
 
 #Use a model to plot ROC curve on data
-display = RocCurveDisplay.from_estimator(estimator=gs_log_reg,
-                               X=X_test,
-                               y=y_test,
-                               ax=ax)
+#display = RocCurveDisplay.from_estimator(estimator=gs_log_reg,
+                               #X=X_test,
+                               #y=y_test,
+                               #ax=ax)
 
-plt.savefig(f'{folder_name}/RocCurveDisplay.png', dpi=300)
-plt.close()
+#plt.savefig(f'{folder_name}/RocCurveDisplay.png', dpi=300)
+#plt.close()
+
+sns.set(font_scale=1.5)
+
+def plot_conf_mat(y_test, y_preds):
+    fig, ax = plt.subplots(figsize=(3,3))
+    ax = sns.heatmap(confusion_matrix(y_test, y_preds),
+                     annot=True,
+                     cbar=False)
+    plt.xlabel("true label")
+    plt.ylabel("predicted label")
+    plt.savefig(f'{folder_name}/ConfusionMatrix.png', dpi=300)
+
+plot_conf_mat(y_test, y_preds)
