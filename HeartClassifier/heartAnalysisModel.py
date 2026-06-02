@@ -239,5 +239,15 @@ clf = LogisticRegression(C=78.47599703514607, solver="liblinear")
 clf.fit(X_train, y_train)
 
 #Check coef_
-print(clf.coef_)
+#print(clf.coef_)
+
+#Match features to columns
+features_dict = dict(zip(df.columns, list(clf.coef_[0])))
+
+#Visualize feature importance
+features_df = pd.DataFrame(features_dict, index=[0])
+fig, ax = plt.subplots(8,8)
+ax = features_df.T.plot.bar(title="Feature Importance", legend=False)
+plt.savefig(f'{folder_name}/FeatureImportance.png', dpi=300)
+plt.close()
 
