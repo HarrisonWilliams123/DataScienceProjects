@@ -199,11 +199,45 @@ y_preds = gs_log_reg.predict(X_test)
 clf = LogisticRegression(C=78.47599703514607, solver="liblinear")
 
 #Cross-validated accuracy score
-cv_acc = cross_val_score(clf,
-                         X,
-                         y,
-                         cv=5,
-                         scoring="accuracy")
+#cv_acc = np.mean(cross_val_score(clf,
+                         #X,
+                         #y,
+                         #cv=5,
+                         #scoring="accuracy"))
 
-cv_acc = np.mean(cv_acc)
-print(cv_acc)
+#cv_precision = np.mean(cross_val_score(clf,
+                         #X,
+                         #y,
+                         #cv=5,
+                         #scoring="precision"))
+
+#cv_recall = np.mean(cross_val_score(clf,
+                         #X,
+                         #y,
+                         #cv=5,
+                         #scoring="recall"))
+
+#cv_f1= np.mean(cross_val_score(clf,
+                         #X,
+                         #y,
+                         #cv=5,
+                         #scoring="f1"))
+
+#Visualizing cross-validated metrics
+#cv_metrics = pd.DataFrame({"Accuracy": cv_acc,
+                           #"Precision": cv_precision,
+                           #"Recall": cv_recall,
+                           #"F1": cv_f1},
+                           #index=[0])
+
+#fig, ax = plt.subplots(6,6)
+#ax = cv_metrics.T.plot.bar(title="Cross-Validation Metrics", legend=False)
+#plt.savefig(f'{folder_name}/CrossValidationMetrics.png', dpi=300)
+#plt.close()
+
+#Fit an instance of LogisiticRegression
+clf.fit(X_train, y_train)
+
+#Check coef_
+print(clf.coef_)
+
