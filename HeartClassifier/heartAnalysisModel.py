@@ -179,15 +179,31 @@ y_preds = gs_log_reg.predict(X_test)
 #plt.savefig(f'{folder_name}/RocCurveDisplay.png', dpi=300)
 #plt.close()
 
-sns.set(font_scale=1.5)
+#sns.set(font_scale=1.5)
 
-def plot_conf_mat(y_test, y_preds):
-    fig, ax = plt.subplots(figsize=(3,3))
-    ax = sns.heatmap(confusion_matrix(y_test, y_preds),
-                     annot=True,
-                     cbar=False)
-    plt.xlabel("true label")
-    plt.ylabel("predicted label")
-    plt.savefig(f'{folder_name}/ConfusionMatrix.png', dpi=300)
+#def plot_conf_mat(y_test, y_preds):
+    #fig, ax = plt.subplots(figsize=(3,3))
+    #ax = sns.heatmap(confusion_matrix(y_test, y_preds),
+                     #annot=True,
+                     #cbar=False)
+    #plt.xlabel("true label")
+    #plt.ylabel("predicted label")
+    #plt.savefig(f'{folder_name}/ConfusionMatrix.png', dpi=300)
 
-plot_conf_mat(y_test, y_preds)
+#plot_conf_mat(y_test, y_preds)
+
+#Show classification report
+#print(classification_report(y_test, y_preds))
+
+#print(gs_log_reg.best_params_)
+clf = LogisticRegression(C=78.47599703514607, solver="liblinear")
+
+#Cross-validated accuracy score
+cv_acc = cross_val_score(clf,
+                         X,
+                         y,
+                         cv=5,
+                         scoring="accuracy")
+
+cv_acc = np.mean(cv_acc)
+print(cv_acc)
