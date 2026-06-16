@@ -24,8 +24,20 @@ cleaned_new_players = pd.concat(df_list, ignore_index=True)
 cleaned_nba_college_data = pd.concat([cleaned_nba_college_data, cleaned_new_players], ignore_index=True)
 
 #Moves around the columns to match the nba prospects data
-cleaned_nba_college_data = cleaned_nba_college_data[['player', 'team', 'conf', 'exp', 'pos', 'g', 'mpg', 'fgm', 'fga', 'fg_pct', 'three_m', 'three_a', 'three_pct', 'two_m', 'two_a', 'two_pct', 'efg', 'ftm', 'fta', 'ft_pct', 'oreb', 'dreb', 'rpg', 'apg', 'spg', 'bpg', 'tov', 'pfr', 'ppg', 'ortg', 'drtg', 'ts', 'ftr', 'oreb_rate', 'dreb_rate', 'ast', 'stl', 'blk', 'to', 'usg', 'obpm', 'dbpm', 'bpm']]
-cleaned_nba_college_data = cleaned_nba_college_data.rename(columns={"player" : "Name","team": "Team", "conf": "Conf", "pos": "Pos", "exp": "Class", "g": "G", "mpg":"MP", "fgm":"FG", "fga":"FGA", "fg_pct":"FG%",  "three_m":"3P", "three_a":"3PA", "three_pct":"3P%", "two_m":"2P", "two_a":"2PA", "two_pct":"2P%", "efg":"eFG%", "ftm": "FT", "fta":"FTA", "ft_pct":"FT%", "oreb":"ORB", "dreb":"DRB", "rpg":"TRB", "apg":"AST", "spg":"STL", "bpg":"BLK", "tov":"TOV", "pfr":"PF", "ppg":"PTS", "ortg":"ORTG", "drtg":"DRTG", "ts":"TS%", "ftr":"FTr", "oreb_rate":"ORB%", "dreb_rate":"DRB%", "ast":"AST%", "stl":"STL%", "blk":"BLK%", "to":"TOV%", "usg":"USG%", "obpm":"OBPM", "dbpm":"DBPM", "bpm": "BPM"})
+cleaned_nba_college_data = cleaned_nba_college_data[['player', 'team', 'conf', 'exp', 'pos', 'g', 'mpg', 'fgm', 'fga', 
+                                                     'fg_pct', 'three_m', 'three_a', 'three_pct', 'two_m', 'two_a', 'two_pct', 
+                                                     'efg', 'ftm', 'fta', 'ft_pct', 'oreb', 'dreb', 'rpg', 'apg', 'spg', 'bpg', 'tov', 
+                                                     'pfr', 'ppg', 'ortg', 'drtg', 'ts', 'ftr', 'oreb_rate', 'dreb_rate', 'ast', 'stl', 
+                                                     'blk', 'to', 'usg', 'obpm', 'dbpm', 'bpm']]
+cleaned_nba_college_data = cleaned_nba_college_data.rename(columns={"player" : "Name","team": "Team", "conf": "Conf", "pos": "Pos", "exp": "Class", 
+                                                                    "g": "G", "mpg":"MP", "fgm":"FG", "fga":"FGA", "fg_pct":"FG%",  
+                                                                    "three_m":"3P", "three_a":"3PA", "three_pct":"3P%", "two_m":"2P", 
+                                                                    "two_a":"2PA", "two_pct":"2P%", "efg":"eFG%", "ftm": "FT", "fta":"FTA", 
+                                                                    "ft_pct":"FT%", "oreb":"ORB", "dreb":"DRB", "rpg":"TRB", "apg":"AST", 
+                                                                    "spg":"STL", "bpg":"BLK", "tov":"TOV", "pfr":"PF", "ppg":"PTS", "ortg":"ORTG", 
+                                                                    "drtg":"DRTG", "ts":"TS%", "ftr":"FTr", "oreb_rate":"ORB%", "dreb_rate":"DRB%",
+                                                                      "ast":"AST%", "stl":"STL%", "blk":"BLK%", "to":"TOV%", "usg":"USG%", 
+                                                                      "obpm":"OBPM", "dbpm":"DBPM", "bpm": "BPM"})
 
 #Converted to the right information of Minutes Played
 cleaned_nba_college_data['MP'] = cleaned_nba_college_data.apply(lambda row: round(row['MP'] * row['G']), axis=1)
@@ -72,7 +84,13 @@ cleaned_nba_college_data['DBPM'] = cleaned_nba_college_data['DBPM'].round(1)
 cleaned_nba_college_data['BPM'] = cleaned_nba_college_data['BPM'].round(1)
 
 #Capitalizes the Class of the player's college data
-cleaned_nba_college_data['Class'] = cleaned_nba_college_data['Class'].upper()
+cleaned_nba_college_data['Class'] = cleaned_nba_college_data['Class'].str.upper()
+
+#Replaces specific examples for position with Guard, Forward or Center
+cleaned_nba_college_data['Pos'] = cleaned_nba_college_data['Pos'].replace({'Combo G': 'G', 'Scoring PG': 'G', 'Pure PG': 'G'})
+cleaned_nba_college_data['Pos'] = cleaned_nba_college_data['Pos'].replace({'Wing F' : 'F', 'Stretch 4' : 'F', 'Wing G' : 'F'})
+cleaned_nba_college_data['Pos'] = cleaned_nba_college_data['Pos'].replace({'PF/C' : 'C'})
+
 
 
 cleaned_nba_college_data.to_csv("data/TestNBACollegeStats.csv", index=False)
