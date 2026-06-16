@@ -27,4 +27,52 @@ cleaned_nba_college_data = pd.concat([cleaned_nba_college_data, cleaned_new_play
 cleaned_nba_college_data = cleaned_nba_college_data[['player', 'team', 'conf', 'exp', 'pos', 'g', 'mpg', 'fgm', 'fga', 'fg_pct', 'three_m', 'three_a', 'three_pct', 'two_m', 'two_a', 'two_pct', 'efg', 'ftm', 'fta', 'ft_pct', 'oreb', 'dreb', 'rpg', 'apg', 'spg', 'bpg', 'tov', 'pfr', 'ppg', 'ortg', 'drtg', 'ts', 'ftr', 'oreb_rate', 'dreb_rate', 'ast', 'stl', 'blk', 'to', 'usg', 'obpm', 'dbpm', 'bpm']]
 cleaned_nba_college_data = cleaned_nba_college_data.rename(columns={"player" : "Name","team": "Team", "conf": "Conf", "pos": "Pos", "exp": "Class", "g": "G", "mpg":"MP", "fgm":"FG", "fga":"FGA", "fg_pct":"FG%",  "three_m":"3P", "three_a":"3PA", "three_pct":"3P%", "two_m":"2P", "two_a":"2PA", "two_pct":"2P%", "efg":"eFG%", "ftm": "FT", "fta":"FTA", "ft_pct":"FT%", "oreb":"ORB", "dreb":"DRB", "rpg":"TRB", "apg":"AST", "spg":"STL", "bpg":"BLK", "tov":"TOV", "pfr":"PF", "ppg":"PTS", "ortg":"ORTG", "drtg":"DRTG", "ts":"TS%", "ftr":"FTr", "oreb_rate":"ORB%", "dreb_rate":"DRB%", "ast":"AST%", "stl":"STL%", "blk":"BLK%", "to":"TOV%", "usg":"USG%", "obpm":"OBPM", "dbpm":"DBPM", "bpm": "BPM"})
 
-cleaned_nba_college_data.to_csv("data/ComparedNBACollegeStats.csv", index=False)
+#Converted to the right information of Minutes Played
+cleaned_nba_college_data['MP'] = cleaned_nba_college_data.apply(lambda row: round(row['MP'] * row['G']), axis=1)
+
+#Converts the fg and fga to the correct format
+cleaned_nba_college_data['FG'] = cleaned_nba_college_data.apply(lambda row: round(row['FG'] / row['G'], 1), axis=1)
+cleaned_nba_college_data['FGA'] = cleaned_nba_college_data.apply(lambda row: round(row['FGA'] / row['G'], 1), axis=1)
+
+#Round the field goal percentages to the correct value
+cleaned_nba_college_data['FG%'] = cleaned_nba_college_data['FG%'].round(3)
+
+#Converts the 3P,3PA,2P, and 2PA to the correct format
+cleaned_nba_college_data['3P'] = cleaned_nba_college_data.apply(lambda row: round(row['3P'] / row['G'], 1), axis=1)
+cleaned_nba_college_data['3PA'] = cleaned_nba_college_data.apply(lambda row: round(row['3PA'] / row['G'], 1), axis=1)
+cleaned_nba_college_data['2P'] = cleaned_nba_college_data.apply(lambda row: round(row['2P'] / row['G'], 1), axis=1)
+cleaned_nba_college_data['2PA'] = cleaned_nba_college_data.apply(lambda row: round(row['2PA'] / row['G'], 1), axis=1)
+
+#Converts the right eFG% value
+cleaned_nba_college_data['eFG%'] = cleaned_nba_college_data.apply(lambda row: round(row['eFG%'] / 100, 3), axis=1)
+
+#Converts the right FT & FTA values
+cleaned_nba_college_data['FT'] = cleaned_nba_college_data.apply(lambda row: round(row['FT'] / row['G'], 1), axis=1)
+cleaned_nba_college_data['FTA'] = cleaned_nba_college_data.apply(lambda row: round(row['FTA'] / row['G'], 1), axis=1)
+
+#Rounds the values here, to match the format of the other data
+cleaned_nba_college_data['ORB'] = cleaned_nba_college_data['ORB'].round(1)
+cleaned_nba_college_data['DRB'] = cleaned_nba_college_data['DRB'].round(1)
+cleaned_nba_college_data['TRB'] = cleaned_nba_college_data['TRB'].round(1)
+cleaned_nba_college_data['AST'] = cleaned_nba_college_data['AST'].round(1)
+cleaned_nba_college_data['STL'] = cleaned_nba_college_data['STL'].round(1)
+cleaned_nba_college_data['BLK'] = cleaned_nba_college_data['BLK'].round(1)
+cleaned_nba_college_data['TOV'] = cleaned_nba_college_data['TOV'].round(1)
+cleaned_nba_college_data['PTS'] = cleaned_nba_college_data['PTS'].round(1)
+cleaned_nba_college_data['ORTG'] = cleaned_nba_college_data['ORTG'].round(1)
+cleaned_nba_college_data['DRTG'] = cleaned_nba_college_data['DRTG'].round(1)
+
+#Converts to the right format for TS% & FTr
+cleaned_nba_college_data['TS%'] = cleaned_nba_college_data.apply(lambda row: round(row['TS%'] / 100, 3), axis=1)
+cleaned_nba_college_data['FTr'] = cleaned_nba_college_data.apply(lambda row: round(row['FTr'] / 100, 3), axis=1)
+
+#Converts to the right format for OBPM, DBPM, & BPM
+cleaned_nba_college_data['OBPM'] = cleaned_nba_college_data['OBPM'].round(1)
+cleaned_nba_college_data['DBPM'] = cleaned_nba_college_data['DBPM'].round(1)
+cleaned_nba_college_data['BPM'] = cleaned_nba_college_data['BPM'].round(1)
+
+#Capitalizes the Class of the player's college data
+cleaned_nba_college_data['Class'] = cleaned_nba_college_data['Class'].upper()
+
+
+cleaned_nba_college_data.to_csv("data/TestNBACollegeStats.csv", index=False)
