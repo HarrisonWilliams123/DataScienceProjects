@@ -2,12 +2,13 @@ import pandas as pd
 
 cleaned_nba_college_data = pd.read_csv("data/NBAPlayerCollegeStats.csv")
 raw_nba_college_data = pd.read_csv("data/NBAPlayerCollegeStats.csv")
+progress_nba_data = pd.read_csv("data/ProgressNBACollegeStats.csv")
 
 #Removes the previous college years, keeps the latest year
 cleaned_nba_college_data = cleaned_nba_college_data.drop_duplicates(subset=['player'], keep='last')
 
 #Removes the wrong nba players in the databases
-names_to_remove = ['Donovan Mitchell', 'Kyle Anderson', 'Gary Harris', 'Isaiah Jackson', 'Cameron Johnson', 'Jalen Johnson', 'Isaac Jones', 'Tre Jones', 'AJ Lawson', ' Isaiah Stevens', 'Brandon Williams', 'Grant Williams', ' Jaylin Williams']
+names_to_remove = ['Donovan Mitchell', 'Kyle Anderson', 'Gary Harris', 'Isaiah Jackson', 'Cameron Johnson', 'Jalen Johnson', 'Isaac Jones', 'Tre Jones', 'A.J. Lawson', ' Isaiah Stevens', 'Brandon Williams', 'Grant Williams', ' Jaylin Williams', 'Jalen Smith']
 rows_to_add = [726, 26, 361, 429, 471, 485, 515, 527, 596, 1004, 1136, 1141, 1155]
 
 #Removes the wrong nba player data 
@@ -91,6 +92,32 @@ cleaned_nba_college_data['Pos'] = cleaned_nba_college_data['Pos'].replace({'Comb
 cleaned_nba_college_data['Pos'] = cleaned_nba_college_data['Pos'].replace({'Wing F' : 'F', 'Stretch 4' : 'F', 'Wing G' : 'F'})
 cleaned_nba_college_data['Pos'] = cleaned_nba_college_data['Pos'].replace({'PF/C' : 'C'})
 
+#Removes the extra duplicates that were not caught
+progress_nba_data = progress_nba_data.drop_duplicates(subset=['Name'], keep='last')
+#Removes an inactive player
+progress_nba_data = progress_nba_data[progress_nba_data['Name'] != 'Jalen Smith']
+
+#Merges to create the final spreadsheet
+cleaned_nba_college_data = cleaned_nba_college_data.drop(columns= "Pos") 
+unique_columns = ["Name"] + ["Pos"] + list(progress_nba_data.columns.difference(cleaned_nba_college_data.columns))
+final_df = pd.merge(cleaned_nba_college_data, progress_nba_data[unique_columns], on='Name', how ='left')
+
+#Gets rid of the duplicate players
+final_df = final_df.drop_duplicates(subset=['Name'], keep='last')
+
+#Rearranges the columns to match the nba prospects sheet
+final_df = final_df[['Name', 'Team', 'Conf', 'Class', 'Pos', 'G', 'MP', 'FG', 'FGA', 
+                                                     'FG%', '3P', '3PA', '3P%', '2P', '2PA', '2P%', 
+                                                     'eFG%', 'FT', 'FTA', 'FT%', 'ORB', 'DRB', 'TRB', 'AST', 'STL', 'BLK', 'TOV', 
+                                                     'PF', 'PTS', 'ORTG', 'DRTG', 'PER ', 'TS%', '3PAr', 'FTr', 'ORB%', 'DRB%', 'TRB%', 
+                                                     'AST%', 'STL%', 'BLK%', 'TOV%', 'USG%', 'OWS', 'DWS', 'WS', 'WS/40', 'OBPM',
+                                                     'DBPM', 'BPM']]
+
+#Gets rid of the duplicate columns
+final_df = final_df.loc[:, ~final_df.columns.duplicated()]
+#Writes the csv file
+final_df.to_csv("data/FinalNBACollegeStats.csv", index=False)
 
 
-cleaned_nba_college_data.to_csv("data/TestNBACollegeStats.csv", index=False)
+
+
