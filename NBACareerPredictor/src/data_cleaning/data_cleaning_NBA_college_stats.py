@@ -116,7 +116,7 @@ final_df = final_df[['Name', 'Team', 'Conf', 'Class', 'Pos', 'G', 'MP', 'FG', 'F
 #Gets rid of the duplicate columns
 final_df = final_df.loc[:, ~final_df.columns.duplicated()]
 #Writes the csv file
-final_df.to_csv("data/FinalNBACollegeStats.csv", index=False)
+final_df.to_csv("data/testNBACollegeStats.csv", index=False)
 
 
 
