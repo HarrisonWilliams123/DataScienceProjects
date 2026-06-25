@@ -1,69 +1,60 @@
 import pandas as pd
-import time
 
-from nba_api.stats.endpoints import commonplayerinfo, playercareerstats
-from nba_api.stats.static import players
+#Load Files
+adv = pd.read_csv("data/Advanced.csv")
+allstar = pd.read_csv("data/All-Star Selections.csv")
+awards = pd.read_csv("data/Player Award Shares.csv")
 
-college = pd.read_csv("data/FinalNBACollegeStats.csv")
-college2 = pd.read_csv("data/FinalNBACollegeStats2.csv")
-intl = pd.read_csv("data/FinalNBAInternationalStats.csv")
+#Career Totals
+adv_totals = (
+    adv.groupby(["player", "player_id"]).agg(Career_MP=("mp", "sum"), Career_WS=("ws", "sum"), Career_VORP=("vorp", "sum")).reset_index()
+)
 
-all_names = pd.concat([college["Name"], college2["Name"], intl["Name"]]).drop_duplicates().to_list()
+#All-Star Selections
+allstar_counts = (
+    allstar.groupby("player_id").size().reset_index(name="All_Star_Selections")
+)
 
-def find_player_id(name):
-    matches = players.find_players_by_full_name(name)
-    if len(matches) == 0:
-        return None
-    return matches[0]["id"]
+#All-NBA Selections
+mvp = awards[awards["award"] == "nba mvp"]
+mvp = mvp[mvp["pts_won"] > 0]
 
-def get_nba_career_data(player_id):
-    career = playercareerstats.PlayerCareerStats(player_id=player_id)
-    df = career.get_data_frames()[0]
-    totals = df[df["LEAGUE_ID"] == "00"]
+allnba = (
+    mvp.groupby("player_id")["season"].nunique().reset_index(name="All_NBA_Selections")
+)
 
-    #Career Totals
-    career_mp = totals["MIN"].sum()
-    career_ws = totals["WS"].sum()
-    career_vorp = totals["VORP"].sum()
+#Merging Everything
+df = adv_totals.merge(allstar_counts, on="player_id", how="left")
+df = df.merge(allnba, on="player_id", how="left")
 
-    #Awards
-    info = commonplayerinfo.CommonPlayerInfo(player_id=player_id)
-    info_df = info.get_data_frames()[0]
-    all_star = info_df["ALL_STAR_APPEARANCES"].iloc[0]
-    all_nba = info_df["ALL_NBA_SELECTIONS"].iloc[0]
+df["All_Star_Selections"] = df["All_Star_Selections"].fillna(0).astype(int)
+df["All_NBA_Selections"] = df["All_NBA_Selections"].fillna(0).astype(int)
 
-    return career_mp, career_ws, career_vorp, all_star, all_nba
+#Label Players
+def label(row):
+    ws = row.Career_WS
+    mp = row.Career_MP
+    allstar = row.All_Star_Selections
+    allnba = row.All_NBA_Selections
 
-def classify_player(mp, ws, vorp, all_star, all_nba):
-    if ws >= 80 or vorp >= 40 or all_nba >= 3:
-        return "superstar"
+    if allnba >= 3 or ws >= 100:
+        return "Superstar"
+    if allstar >= 1 or allnba >= 1 or ws >= 50:
+        return "All-Star"
+    if mp >= 10000 or ws >= 20:
+        return "Starter"
+    return "Rotational"
 
-    if all_star >= 1 or 40 <= ws < 80 or 15 <= vorp < 40:
-        return "all_star"
-    
-    if mp >= 12000 or 15 <= ws < 40 or 5 <= vorp < 15:
-        return "starter"
-    
-    return "rotational"
+df["OutcomeClass"] = df.apply(label, axis=1)
 
-rows = []
-for name in all_names:
-    pid = find_player_id(name)
-    if pid is None:
-        continue
-    mp, ws, vorp, all_star, all_nba = get_nba_career_data(pid)
-    label = classify_player(mp, ws, vorp, all_star, all_nba)
+df.to_csv("data/NBAOutcomes_Unfiltered.csv", index=False)
 
-    rows.append({
-        "Name": name,
-        "Career_MP": mp,
-        "Career_WS": ws,
-        "Career_VORP": vorp,
-        "All_Star_Selections": all_star,
-        "All_NBA_Selections": all_nba,
-        "OutcomeClass": label
-    })
+name_df = pd.read_csv("data/TotalNBACollegeStats.csv")
+df['player'] = df['player'].str.strip()
+name_df['Name'] = name_df['Name'].str.strip()
 
-nba_outcomes = pd.DataFrame(rows)
-nba_outcomes.to_csv("NBAOutcomes.csv", index=False)
 
+filtered_df = df[df['player'].isin(name_df['Name'])]
+
+#Save
+filtered_df.to_csv("data/NBAOutcomes_Filtered.csv", index=False)
