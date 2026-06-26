@@ -1,1 +1,30 @@
 data/*.csv
+venv/
+__pycache__/
+*.pyc
+models/
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Python packaging
+*.egg-info/
+*.egg
+dist/
+build/
+
+# Logs
+*.log
+
+# Cache directories
+.cache/
+*.pkl
+*.joblib
+
+# Environment files
+.env
+.env.*
