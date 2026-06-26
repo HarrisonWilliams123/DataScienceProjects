@@ -26,6 +26,6 @@ def label_encode(df):
         "All-Star": 2,
         "Superstar": 3
     }
-    df["label"] = df["OutcomeClass"].mao(label_map)
+    df["label"] = df["OutcomeClass"].map(label_map)
     return df, label_map
 
