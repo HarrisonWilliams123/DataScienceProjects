@@ -3,11 +3,11 @@ from sklearn.preprocessing import StandardScaler, OneHotEncoder
 
 #Numeric Features in the dataset that are included in both datasets
 NUMERIC_FEATURES = [
-    "G", "MP", "FG", "FGA", "FG%", "3P", "3PA", "3P%", "2P%", "FT%", "PTS",
-    "TS%", "USG%", "ORTG", "PER",
-    "TRB", "AST", "AST%", "ORB%", "DRB%",
-    "STL", "BLK", "STL%", "BLK%", "DRTG", "PF",
-    "TOV", "TOV%"
+    "G", "MP", "FG", "FGA", "FG%", "3P", "3PA", "3P%", "2P", "2PA", "2P%", "eFG%",
+    "FT", "FTA", "FT%", "ORB",
+    "DRB", "TRB", "AST", "STL", "BLK",
+    "TOV", "PF", "PTS", "ORTG", "DRTG", "PER", "TS%",
+    "3PAr", "FTr", "OWS", "DWS", "WS/40"
 ]
 
 CATEGORICAL_FEATURES = ["Pos", "Conf", "Class"]
